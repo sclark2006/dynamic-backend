@@ -3,7 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
-import { DynamicApiModule } from './dynamic-api/dynamic-api.module';
+import { DynamicApiModule } from './features/dynamic-api/dynamic-api.module';
+import { PolizasModule } from './features/polizas/polizas.module';
+import { AseguradosModule } from './features/asegurados/asegurados.module';
 
 @Module({
   imports: [
@@ -12,6 +14,8 @@ import { DynamicApiModule } from './dynamic-api/dynamic-api.module';
     }),
     DatabaseModule,
     DynamicApiModule,
+    PolizasModule,
+    AseguradosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

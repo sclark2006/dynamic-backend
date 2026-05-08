@@ -16,9 +16,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
             port: configService.get<number>('DB_PORT'),
             username: configService.get<string>('DB_USERNAME'),
             password: configService.get<string>('DB_PASSWORD'),
-            sid: configService.get<string>('DB_SID'),
             serviceName: configService.get<string>('DB_SERVICE_NAME'),
-            synchronize: false, // careful with this in production
+            entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+            synchronize: false,
             logging: true,
           };
         } else {
@@ -29,6 +29,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
             username: configService.get<string>('DB_USERNAME'),
             password: configService.get<string>('DB_PASSWORD'),
             database: configService.get<string>('DB_NAME'),
+            entities: [__dirname + '/../**/*.entity{.ts,.js}'],
             synchronize: false,
             logging: true,
           };

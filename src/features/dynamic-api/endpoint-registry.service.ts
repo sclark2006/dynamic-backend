@@ -1,26 +1,19 @@
 import { Injectable } from '@nestjs/common';
-
-export interface DynamicEndpoint {
-    name: string;
-    sql: string; // The base SQL query or SP call
-    type: 'query' | 'procedure';
-    method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
-    isCollection?: boolean;
-    pagination?: boolean;
-    primaryKey?: string;
-    description?: string;
-}
+import { DynamicEndpoint } from './dynamic-endpoint.interface';
 
 @Injectable()
 export class EndpointRegistryService {
     private endpoints: Map<string, DynamicEndpoint> = new Map();
 
     constructor() {
-        // Seed with some examples
         this.register({
             name: 'employees',
             sql: 'SELECT * FROM employees',
             type: 'query',
+            method: 'GET',
+            isCollection: true,
+            pagination: true,
+            primaryKey: 'id',
             description: 'Get all employees',
         });
 
@@ -28,7 +21,11 @@ export class EndpointRegistryService {
             name: 'departments',
             sql: 'SELECT * FROM departments',
             type: 'query',
-            description: 'Get all departments'
+            method: 'GET',
+            isCollection: true,
+            pagination: true,
+            primaryKey: 'id',
+            description: 'Get all departments',
         });
     }
 

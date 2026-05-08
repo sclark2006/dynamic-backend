@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, MethodNotAllowedException } from '@nestjs/common';
+import { Injectable, NotFoundException, MethodNotAllowedException, BadRequestException } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { EndpointRegistryService } from './endpoint-registry.service';
 import { QueryParser } from './query-parser.util';
@@ -31,7 +31,7 @@ export class DynamicApiService {
             try {
                 parsedQuery = typeof query.q === 'string' ? JSON.parse(query.q) : query.q;
             } catch (e) {
-                // ignore
+                throw new BadRequestException(`Invalid JSON in "q" parameter: ${query.q}`);
             }
         }
 
@@ -61,17 +61,10 @@ export class DynamicApiService {
             const limit = query.limit ? parseInt(query.limit, 10) : 25;
             const offset = query.offset ? parseInt(query.offset, 10) : 0;
 
-            // Count query
-            // optimization: SELECT COUNT(*) FROM (endpoint.sql) base ... where
             const countSql = `SELECT COUNT(*) as "total" FROM (${endpoint.sql}) base_query ${where}`;
-
-            // Execute count
-            // We need to pass params for WHERE clause again
-            // NOTE: params are mixed? No, they are purely for WHERE, so safe to reuse.
             const countResult = await this.dataSource.query(countSql, params);
             const total = parseInt(countResult[0].total || countResult[0].count, 10);
 
-            // Paging SQL
             let pagingSql = '';
             const pagingParams = [...params];
 
@@ -87,7 +80,6 @@ export class DynamicApiService {
             console.log(`Executing Paged SQL: ${pagingSql} with params:`, pagingParams);
             const items = await this.dataSource.query(pagingSql, pagingParams);
 
-            // HATEOAS Links
             const links = this.generateLinks(endpointName, query, limit, offset, total);
 
             return {
@@ -139,11 +131,10 @@ export class DynamicApiService {
         return links;
     }
 
-    // Helper to keep q and fields param in links
     private serializeQ(query: any) {
         let str = '';
-        if (query.q) str += `&q=${query.q}`;
-        if (query.fields) str += `&fields=${query.fields}`;
+        if (query.q) str += `&q=${encodeURIComponent(query.q)}`;
+        if (query.fields) str += `&fields=${encodeURIComponent(query.fields)}`;
         return str;
     }
 }

@@ -1,0 +1,117 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "npm",
+            "script": "build",
+            "group": "build",
+            "problemMatcher": ["$tsc"],
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "start:dev",
+            "type": "npm",
+            "script": "start:dev",
+            "group": "none",
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "^([^\\s].*)\\((\\d+|\\d+,\\d+|\\d+,\\d+,\\d+,\\d+)\\):\\s+(error|warning|info)\\s+(TS\\d+)\\s*:\\s*(.*)$",
+                    "file": 1,
+                    "location": 2,
+                    "severity": 3,
+                    "code": 4,
+                    "message": 5
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Starting compilation in watch mode",
+                    "endsPattern": "Nest application successfully started"
+                }
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "group": "serve"
+            }
+        },
+        {
+            "label": "start:prod",
+            "type": "npm",
+            "script": "start:prod",
+            "group": "none",
+            "dependsOn": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "group": "serve"
+            }
+        },
+        {
+            "label": "test",
+            "type": "npm",
+            "script": "test",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": ["$tsc"],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "group": "test"
+            }
+        },
+        {
+            "label": "test:watch",
+            "type": "npm",
+            "script": "test:watch",
+            "group": "test",
+            "isBackground": true,
+            "problemMatcher": ["$tsc"],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "group": "test"
+            }
+        },
+        {
+            "label": "test:cov",
+            "type": "npm",
+            "script": "test:cov",
+            "group": "test",
+            "problemMatcher": ["$tsc"],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "group": "test"
+            }
+        },
+        {
+            "label": "seed",
+            "type": "npm",
+            "script": "seed",
+            "group": "none",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "lint",
+            "type": "npm",
+            "script": "lint",
+            "group": "none",
+            "problemMatcher": ["$eslint-stylish"],
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            }
+        }
+    ]
+}
